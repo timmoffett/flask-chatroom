@@ -5,11 +5,11 @@
 	<title>Chatroom</title>
 </head>
 <body>
-	<h3>No message yet...</h3>
+	<h3>Hello {{ user }} </h3>
 	<div class="message_box"></div>
 	
 	<form action="" method="POST">
-		<input type="text" class="username" placeholder="User Name"/>
+		<input type="text" class="username" value={{ user }} readonly/>
 		<input type="text" class="message" placeholder="Messages"/>
 		<input type="submit"/>
 	</form>

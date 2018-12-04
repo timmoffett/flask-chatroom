@@ -19,8 +19,11 @@ def login():
 
 @app.route('/')
 def sessions():
-    username = session['username']
-    return render_template('chatroom.html', user=username)
+    try:
+        username = session['username']
+        return render_template('chatroom.html', user=username)
+    except:
+        return redirect(url_for('login'))
 
 def messageReceived(methods=['GET', 'POST']):
     print('message received')

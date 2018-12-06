@@ -2,7 +2,6 @@
 
 from flask import Flask, render_template, request, redirect, session, url_for
 from flask_socketio import SocketIO
-import os
 
 app = Flask(__name__)
 app.secret_key = 'dumbkey'

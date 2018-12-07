@@ -1,5 +1,6 @@
 #! /usr/bin/python
 
+from datetime import timedelta
 from flask import Flask, render_template, request, redirect, session, url_for
 from flask_socketio import SocketIO
 import os
@@ -9,6 +10,8 @@ app.secret_key = 'dumbkey'
 app.config['SESSION_TYPE'] = 'memcached' 
 socketio = SocketIO(app)
 imgurl = "https://i.guim.co.uk/img/static/sys-images/Guardian/Pix/pictures/2015/5/1/1430492654253/240db3a1-e137-4d5e-aff0-0a58b34ca6c3-1020x729.jpeg?width=700&quality=85&auto=format&fit=max&s=1ed5cdce54406c97915ce4aab23a4ec0"
+clients = []
+
 
 def get_all_chat():
     '''Get all of the messages'''
@@ -16,6 +19,11 @@ def get_all_chat():
     if f.mode == 'r':
     	messages = f.read()
     return str(messages)
+
+@app.before_request
+def make_session_permanent():
+	session.permanent = True
+	app.permanent_session_lifetime = timedelta(minutes=5)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -50,6 +58,7 @@ def handle_event(json, methods=['GET', 'POST']):
         print('worked')
     elif json['message'] == '/chat':
         messages = get_all_chat()
+	json['message'] = messages
         #I'm not really sure what to do with this yet, but
         #it should only display on the user who typed /chat
         #Is this a server thing or a client thing?
